@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hey, Chandrani 🌸</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #FDF6F0;
+      --rose: #E8B4B8;
+      --mauve: #C47A7A;
+      --charcoal: #2C2C2C;
+      --soft: #9A7070;
+    }
+
+    html, body {
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: 'Inter', sans-serif;
+      color: var(--charcoal);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 15% 20%, rgba(232,180,184,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 85% 80%, rgba(196,122,122,0.10) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 64px 24px 80px;
+    }
+
+    /* Header */
+    .greeting {
+      font-family: 'Cormorant Garant', serif;
+      font-size: clamp(2.8rem, 8vw, 5.5rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--mauve);
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      text-align: center;
+      opacity: 0;
+      animation: fadeUp 1.2s ease forwards 0.3s;
+    }
+
+    .greeting span {
+      color: var(--charcoal);
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    /* Sender note */
+    .from-note {
+      margin-top: 14px;
+      font-size: 0.85rem;
+      color: var(--soft);
+      font-style: italic;
+      letter-spacing: 0.04em;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 0.9s;
+    }
+
+    .line {
+      width: 1px;
+      height: 0;
+      background: var(--rose);
+      margin: 36px auto;
+      animation: growLine 1s ease forwards 1.2s;
+    }
+
+    /* Intro note */
+    .intro {
+      max-width: 480px;
+      text-align: center;
+      font-family: 'Cormorant Garant', serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--soft);
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 1.8s;
+      margin-bottom: 44px;
+    }
+
+    /* Messages */
+    .messages {
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+      max-width: 540px;
+      width: 100%;
+    }
+
+    .msg {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease forwards;
+    }
+
+    .msg:nth-child(1) { animation-delay: 2.2s; }
+    .msg:nth-child(2) { animation-delay: 3.0s; }
+    .msg:nth-child(3) { animation-delay: 3.8s; }
+    .msg:nth-child(4) { animation-delay: 4.6s; }
+    .msg:nth-child(5) { animation-delay: 5.4s; }
+
+    .msg-bubble {
+      background: #fff;
+      border: 1px solid rgba(232,180,184,0.5);
+      border-radius: 2px 18px 18px 18px;
+      padding: 16px 20px;
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.65;
+      color: var(--charcoal);
+      box-shadow: 0 2px 16px rgba(196,122,122,0.07);
+      align-self: flex-start;
+      max-width: 88%;
+    }
+
+    .msg-bubble em {
+      font-family: 'Cormorant Garant', serif;
+      font-size: 1.1em;
+      font-style: italic;
+      color: var(--soft);
+    }
+
+    .reply-wrap {
+      align-self: flex-end;
+      width: 88%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .reply-label {
+      font-size: 0.72rem;
+      color: var(--rose);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+      font-weight: 400;
+    }
+
+    textarea.reply {
+      width: 100%;
+      min-height: 80px;
+      background: rgba(255,255,255,0.75);
+      border: 1.5px solid rgba(232,180,184,0.6);
+      border-radius: 18px 2px 18px 18px;
+      padding: 14px 18px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.65;
+      color: var(--charcoal);
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+    }
+
+    textarea.reply::placeholder {
+      color: #D4A0A4;
+      font-style: italic;
+    }
+
+    textarea.reply:focus {
+      border-color: var(--mauve);
+      box-shadow: 0 2px 18px rgba(196,122,122,0.15);
+      background: #fff;
+    }
+
+    /* Send button */
+    .send-wrap {
+      max-width: 540px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 44px;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 6.4s;
+    }
+
+    .send-btn {
+      background: var(--mauve);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 48px;
+      font-family: 'Cormorant Garant', serif;
+      font-size: 1.15rem;
+      font-style: italic;
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(196,122,122,0.25);
+    }
+
+    .send-btn:hover {
+      background: #b86a6a;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(196,122,122,0.35);
+    }
+
+    .send-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Success state */
+    .success-msg {
+      display: none;
+      max-width: 480px;
+      text-align: center;
+      margin-top: 40px;
+      padding: 28px 32px;
+      background: #fff;
+      border: 1px solid rgba(232,180,184,0.5);
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(196,122,122,0.1);
+    }
+
+    .success-msg p {
+      font-family: 'Cormorant Garant', serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--soft);
+      line-height: 1.6;
+    }
+
+    .closing {
+      margin-top: 56px;
+      text-align: center;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 6.8s;
+    }
+
+    .closing p {
+      font-family: 'Cormorant Garant', serif;
+      font-style: italic;
+      font-size: 1.25rem;
+      color: var(--soft);
+      font-weight: 300;
+    }
+
+    .petal {
+      display: inline-block;
+      font-size: 1.4rem;
+      margin-top: 12px;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 7.2s;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes growLine {
+      to { height: 48px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: 0.01ms !important; animation-delay: 0.01ms !important; }
+    }
+
+    @media (max-width: 480px) {
+      .msg-bubble, textarea.reply { font-size: 0.92rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <h1 class="greeting">Hey, <span>Chandrani</span> ✿</h1>
+    <p class="from-note">— made for you, with love 🌸</p>
+
+    <div class="line"></div>
+
+    <p class="intro">
+      I made this little page just for you.<br/>
+      No pressure at all — only answer if you feel like it. 💕
+    </p>
+
+    <div class="messages" id="formMessages">
+
+      <div class="msg">
+        <div class="msg-bubble">How have you been lately?</div>
+        <div class="reply-wrap">
+          <span class="reply-label">your answer</span>
+          <textarea class="reply" id="q1" placeholder="Type your answer here…"></textarea>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-bubble">How's everything going for you these days?</div>
+        <div class="reply-wrap">
+          <span class="reply-label">your answer</span>
+          <textarea class="reply" id="q2" placeholder="Type your answer here…"></textarea>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-bubble">Has anything interesting — or stressful — happened recently?</div>
+        <div class="reply-wrap">
+          <span class="reply-label">your answer</span>
+          <textarea class="reply" id="q3" placeholder="Type your answer here…"></textarea>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-bubble">
+          You've seemed a little quiet lately.<br/>
+          <em>Is everything okay?</em>
+        </div>
+        <div class="reply-wrap">
+          <span class="reply-label">your answer</span>
+          <textarea class="reply" id="q4" placeholder="Type your answer here…"></textarea>
+        </div>
+      </div>
+
+      <div class="msg">
+        <div class="msg-bubble">
+          If there's anything on your mind, I'm a good listener.<br/>
+          No pressure though — I just wanted you to know I'm here. 🌸
+        </div>
+        <div class="reply-wrap">
+          <span class="reply-label">your answer</span>
+          <textarea class="reply" id="q5" placeholder="Type your answer here…"></textarea>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="send-wrap">
+      <button class="send-btn" onclick="submitForm()">Send my answers 🌷</button>
+    </div>
+
+    <div class="success-msg" id="successMsg">
+      <p>Thank you for sharing, my love. 🌸<br/>Your answers mean everything to me. 💕</p>
+    </div>
+
+    <div class="closing">
+      <p>thinking of you, always.</p>
+      <div class="petal">🌷</div>
+    </div>
+
+  </div>
+
+  <!-- Hidden Google Form iframe for submission -->
+  <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
+  <script>
+    function submitForm() {
+      const q1 = document.getElementById('q1').value.trim();
+      const q2 = document.getElementById('q2').value.trim();
+      const q3 = document.getElementById('q3').value.trim();
+      const q4 = document.getElementById('q4').value.trim();
+      const q5 = document.getElementById('q5').value.trim();
+
+      if (!q1 && !q2 && !q3 && !q4 && !q5) {
+        alert("Please write something — even a little 💕");
+        return;
+      }
+
+      // Build Google Form submission URL
+      // Replace the entry IDs below with your actual Google Form entry IDs
+      const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSeOO_C4tFsaqWj-JL2HgQuQ7drQyh4SUuZfdD6CjVIhINOnYA/formResponse";
+
+      const params = new URLSearchParams();
+      // ⚠️ You need to replace these entry.XXXXXXX values with real ones from your form
+      // To find them: open your Google Form, right-click each field, Inspect, look for name="entry.XXXXXXXXX"
+      params.append("entry.PLACEHOLDER_1", q1);
+      params.append("entry.PLACEHOLDER_2", q2);
+      params.append("entry.PLACEHOLDER_3", q3);
+      params.append("entry.PLACEHOLDER_4", q4);
+      params.append("entry.PLACEHOLDER_5", q5);
+
+      // Submit via hidden iframe (no page redirect)
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = formURL;
+      form.target = 'hidden_iframe';
+
+      params.forEach((value, key) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+      });
+
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+
+      // Show success
+      document.getElementById('formMessages').style.opacity = '0.3';
+      document.getElementById('formMessages').style.pointerEvents = 'none';
+      document.querySelector('.send-wrap').style.display = 'none';
+      const successEl = document.getElementById('successMsg');
+      successEl.style.display = 'block';
+      successEl.style.animation = 'fadeUp 0.8s ease forwards';
+    }
+  </script>
+</body>
+</html>
